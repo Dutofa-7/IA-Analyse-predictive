@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détecteur de Chiffres</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Détecteur de Chiffres</h1>
+    
+    <div class="container">
+        <div class="canvas-section">
+            <h2>Dessiner</h2>
+            <canvas id="canvas" width="280" height="280"></canvas>
+            <div class="buttons">
+                <button class="predict-btn" onclick="predictDigit()">Prédire</button>
+                <button class="clear-btn" onclick="clearCanvas()">Effacer</button>
+            </div>
+        </div>
+
+        <div class="result-section">
+            <h2>Résultat</h2>
+            <div class="result-box" id="resultBox">
+                <div class="result-label">En attente</div>
+                <div style="color: #ccc; font-size: 48px;">—</div>
+            </div>
+            
+            <div class="probabilities" id="probabilities" style="display: none;">
+                <div>Probabilités</div>
+                <div id="probList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+    <script src="script.js"></script>
+</body>
+</html>
