@@ -24,7 +24,7 @@ let lastY = 0;
 
 ctx.fillStyle = "white";
 ctx.fillRect(0, 0, canvas.width, canvas.height);
-ctx.strokeStyle = "#333";
+ctx.strokeStyle = "black";
 ctx.lineWidth = 8;
 ctx.lineCap = "round";
 
@@ -83,18 +83,24 @@ async function predictDigit() {
       pixelArray[i / 4] = pixels[i] / 255.0;
     }
 
-    const tensor = tf.tensor4d(pixelArray, [1, 28, 28, 1]);
+    let tensor = tf.tensor4d(pixelArray, [1, 28, 28, 1]);
+
+    tensor = tf.tidy(() => {
+      let t = tf.tensor4d(pixelArray, [1, 28, 28, 1]);
+      t = t.sub(0.1307).div(0.3081);
+      return t;
+    });
 
     const predictions = model.predict(tensor);
-    const probs = await predictions.data();
+    const probsData = await predictions.data();
+    const probs = Array.from(probsData);
 
     const pred = predictions.argMax(-1).dataSync()[0];
     const confidence = probs[pred];
 
-    displayResults(pred, confidence, Array.from(probs));
+    displayResults(pred, confidence, probs);
 
-    tensor.dispose();
-    predictions.dispose();
+    tf.dispose([tensor, predictions]);
   } catch (error) {
     resultBox.innerHTML = `<div style="color: red; font-size: 12px;">Erreur: ${error.message}</div>`;
   }
